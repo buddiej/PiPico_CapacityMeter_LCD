@@ -1,4 +1,7 @@
-#include <_authentification.h>
+#include "arduino.h"
+#include "captest2.h"
+
+#define CapStartPin 13
 
 /*
   LiquidCrystal Library - Hello World
@@ -42,8 +45,11 @@
 
 */
 
+
 // include the library code:
 #include <LiquidCrystal.h>
+
+uint CapStartVal = 0;
 
 // initialize the library by associating any needed LCD interface pin
 // with the arduino pin number it is connected to
@@ -55,13 +61,31 @@ void setup() {
   lcd.begin(16, 2);
   // Print a message to the LCD.
   lcd.print("hello, Jens!");
+
+  pinMode(CapStartPin, INPUT);
+    // Setup pins for C test 2
+  pinMode(Cap2OutPin, OUTPUT);
+  pinMode(Cap2InPin, OUTPUT);
+  analogReadResolution(12);
 }
 
 void loop() {
   // set the cursor to column 0, line 1
   // (note: line 1 is the second row, since counting begins with 0):
-  lcd.setCursor(0, 1);
-  // print the number of seconds since reset:
-  lcd.print(millis() / 1000);
+  //lcd.setCursor(0, 1);
+  CapStartVal = digitalRead(CapStartPin);
+  
+  if(CapStartVal != 0)   // read the input pin)
+  {
+    Serial.println("----------------------");
+    Serial.print("CapTest2 startet!!!");
+    Serial.println(CapStartVal, DEC);
+    Serial.println("----------------------");
+    captest2();
+  }
+  else
+  {
+    delay(200); // wait
+  }
 }
 
